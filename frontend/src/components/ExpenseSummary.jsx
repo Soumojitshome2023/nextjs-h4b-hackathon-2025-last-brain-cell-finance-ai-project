@@ -1,22 +1,23 @@
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { BarChart3, Plus, ArrowRight } from "lucide-react";
+import { useAuth } from "@/helper/auth";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { BarChart3, Plus, ArrowRight } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 const ExpenseSummary = () => {
+  const { LoggedInUserData } = useAuth();
   const [expenses, setExpenses] = useState([]);
-  
+
   useEffect(() => {
-    const savedExpenses = JSON.parse(localStorage.getItem("expenses") || "[]");
-    setExpenses(savedExpenses.slice(0, 5)); // Show only last 5 expenses
-  }, []);
+    setExpenses(LoggedInUserData?.expenses || []);
+  }, [LoggedInUserData]);
 
   const getCategoryColor = (category) => {
     const colors = {
       "Food": "bg-orange-500",
-      "Transportation": "bg-blue-500", 
+      "Transportation": "bg-blue-500",
       "Entertainment": "bg-purple-500",
       "Shopping": "bg-pink-500",
       "Bills": "bg-red-500",
@@ -59,10 +60,10 @@ const ExpenseSummary = () => {
               <span className="font-medium text-gray-900">Total Recent Expenses</span>
               <span className="font-bold text-red-600">₹{totalExpenses.toLocaleString()}</span>
             </div>
-            
+
             <div className="space-y-3">
               {expenses.map((expense) => (
-                <div key={expense.id} className="flex items-center justify-between p-3 border rounded-lg hover:shadow-md transition-all duration-200 hover:scale-105">
+                <div key={expense._id} className="flex items-center justify-between p-3 border rounded-lg hover:shadow-md transition-all duration-200 hover:scale-105">
                   <div className="flex items-center space-x-3">
                     <div className={`w-3 h-3 ${getCategoryColor(expense.category)} rounded-full`}></div>
                     <div>

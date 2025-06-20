@@ -6,40 +6,18 @@ import { Progress } from "@/components/ui/progress";
 import { useNavigate, Link } from "react-router-dom";
 import ExpenseSummary from "@/components/ExpenseSummary";
 import AIRecommendations from "@/components/AIRecommendations";
-import {
-  TrendingUp,
-  DollarSign,
-  Target,
-  Bot,
-  AlertCircle,
-  Plus
-} from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
+import { TrendingUp, DollarSign, Target, Bot, AlertCircle, Plus } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Dashboard = () => {
   const { LoggedInUserData } = useAuth();
-  const [totalExpenses, setTotalExpenses] = useState(0);
-  const [budgetPercentage, setBudgetPercentage] = useState(0);
-
-  const monthlyAnnualIncome = LoggedInUserData?.annualIncome || 0;
-
-  useEffect(() => {
-    const expenses = LoggedInUserData?.monthlyExpense || 0;
-    const total = expenses.reduce((sum, expense) => sum + expense.amount, 0);
-    const percent = monthlyAnnualIncome > 0 ? (total / monthlyAnnualIncome) * 100 : 0;
-
-    setTotalExpenses(total);
-    setBudgetPercentage(percent);
-  }, [monthlyAnnualIncome]);
 
   if (!LoggedInUserData) return null;
 
+  const monthlyAnnualIncome = LoggedInUserData?.annualIncome || 0;
+  const expenses = LoggedInUserData?.expenses || [];
+  const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+  const budgetPercentage = monthlyAnnualIncome > 0 ? (totalExpenses / monthlyAnnualIncome) * 100 : 0;
   const remainingBudget = monthlyAnnualIncome - totalExpenses;
 
   return (
@@ -50,7 +28,7 @@ const Dashboard = () => {
         {/* Welcome Section */}
         <div className="animate-fade-in">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {LoggedInUserData.name}! 👋
+            Welcome back, {LoggedInUserData?.name}! 👋
           </h1>
           <p className="text-gray-600">
             Here's your financial overview and AI-powered recommendations.

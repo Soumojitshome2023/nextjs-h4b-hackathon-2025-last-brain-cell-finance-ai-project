@@ -1,11 +1,8 @@
-
-import { Button } from "@/components/ui/button";
-import { DollarSign, LogOut, User, Home, BarChart3 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
 import { useUser } from "@civic/auth/react";
+import { Link, useLocation } from "react-router-dom";
+import { DollarSign, LogOut, User, Home, BarChart3 } from "lucide-react";
 
 const Navbar = () => {
-  // const { logout } = useAuth();
   const location = useLocation();
   const { user } = useUser();
 

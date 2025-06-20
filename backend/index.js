@@ -24,7 +24,6 @@ await ConnectMongoDB();
 
 app.post('/api/user/create', async (req, res) => {
   try {
-    console.log(req.body)
     const user = await createUser(req.body);
     res.status(201).json(user);
   } catch (err) {

@@ -1,10 +1,9 @@
-
 import { useAuth } from "@/helper/auth";
 import { Link } from "react-router-dom";
 import { useUser } from "@civic/auth/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { CivicAuthProvider, UserButton } from "@civic/auth/react";
+import { UserButton } from "@civic/auth/react";
 import { ArrowUp, DollarSign, TrendingUp, Shield, Bot, BarChart3 } from "lucide-react";
 
 const Index = () => {
@@ -14,7 +13,7 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="p-6 flex justify-between items-center">
+      <header className="py-4 z-50 px-6 backdrop-blur-xl flex justify-between items-center fixed top-0 w-full">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
             <DollarSign className="w-5 h-5 text-white" />
@@ -25,7 +24,7 @@ const Index = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="px-6 py-20 text-center">
+      <section className="px-6 py-28 text-center">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-5xl font-bold text-gray-900 mb-6 animate-fade-in">
             AI-Powered Financial
@@ -42,11 +41,9 @@ const Index = () => {
                 </Button>
               </Link>
               :
-              <button onClick={signIn} >
-                <Button className="gradient-bg text-white px-8 py-3 text-lg hover:opacity-90">
-                  Start Free Trial
-                </Button>
-              </button>
+              <Button onClick={signIn} className="gradient-bg text-white px-8 py-3 text-lg hover:opacity-90">
+                Start Free Trial
+              </Button>
             }
             <Button variant="outline" className="px-8 py-3 text-lg">
               Learn More
@@ -132,11 +129,18 @@ const Index = () => {
           <p className="text-xl mb-8 opacity-90">
             Join thousands of users who are already making smarter financial decisions with FinanceAI.
           </p>
-          <Link to="/register">
-            <Button className="bg-white text-green-600 px-8 py-3 text-lg hover:bg-gray-100">
-              Start Your Journey
+
+          {LoggedInUserData ?
+            <Link to="/profile">
+              <Button className="bg-white text-green-600 px-8 py-3 text-lg hover:bg-gray-100">
+                Start Free Trial
+              </Button>
+            </Link>
+            :
+            <Button onClick={signIn} className="bg-white text-green-600 px-8 py-3 text-lg hover:bg-gray-100">
+              Start Free Trial
             </Button>
-          </Link>
+          }
         </div>
       </section>
 

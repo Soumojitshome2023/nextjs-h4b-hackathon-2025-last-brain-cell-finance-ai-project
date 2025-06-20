@@ -10,10 +10,7 @@ const AuthUserContext = createContext();
 
 export function useRajAuth() {
     const { user } = useUser();
-    const [LoggedInUserData, setLoggedInUserData] = useState({
-        annualIncome: 20000,
-        riskTolerance: 'Medium'
-    });
+    const [LoggedInUserData, setLoggedInUserData] = useState(null);
 
 
     useEffect(() => {
@@ -45,6 +42,9 @@ export function useRajAuth() {
             };
 
             syncUserData();
+        }
+        else {
+            setLoggedInUserData(null);
         }
     }, [user]);
 

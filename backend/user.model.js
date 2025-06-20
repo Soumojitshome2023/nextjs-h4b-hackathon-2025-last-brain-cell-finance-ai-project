@@ -21,6 +21,17 @@ const userSchema = new Schema(
       min: 0,
       default: 22
     },
+    expenses: {
+      type: [
+        {
+          description: String,
+          amount: Number,
+          category: String,
+          date: Date
+        }
+      ],
+      default: []
+    },
     annualIncome: {
       type: Number,
       min: 0,

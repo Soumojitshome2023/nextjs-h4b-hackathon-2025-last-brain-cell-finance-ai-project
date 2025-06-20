@@ -6,21 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import UpdateUserDataFunc from "../helper/UpdateUserDataFunc";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 
 const Profile = () => {
   const { LoggedInUserData, setLoggedInUserData } = useAuth();
@@ -49,8 +38,7 @@ const Profile = () => {
     try {
       const updatedData = {
         ...LoggedInUserData,
-        name: formData.name,
-        annualIncome: parseFloat(formData.annualIncome),
+        annualIncome: formData.annualIncome,
         riskTolerance: formData.riskTolerance,
       };
 
@@ -63,7 +51,7 @@ const Profile = () => {
         description: "Your information has been saved successfully.",
       });
 
-      navigate("/dashboard");
+      // navigate("/dashboard");
     } catch (error) {
       console.error("Failed to update user:", error);
       toast({
@@ -95,7 +83,6 @@ const Profile = () => {
                   <Input
                     id="name"
                     value={formData.name}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                     required
                     className="transition-all duration-200 focus:scale-105"
                   />
@@ -129,19 +116,19 @@ const Profile = () => {
                     <SelectContent className="bg-white">
                       <SelectItem value="Low">
                         <div>
-                          <div className="font-medium">Conservative</div>
+                          <div className="font-medium">Low</div>
                           <div className="text-sm text-gray-600">Low risk, stable returns (FD, Bonds)</div>
                         </div>
                       </SelectItem>
                       <SelectItem value="Medium">
                         <div>
-                          <div className="font-medium">Moderate</div>
+                          <div className="font-medium">Medium</div>
                           <div className="text-sm text-gray-600">Balanced risk, steady growth (SIP, Mutual Funds)</div>
                         </div>
                       </SelectItem>
                       <SelectItem value="High">
                         <div>
-                          <div className="font-medium">Aggressive</div>
+                          <div className="font-medium">High</div>
                           <div className="text-sm text-gray-600">High risk, high returns (Stocks, Trading)</div>
                         </div>
                       </SelectItem>

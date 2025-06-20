@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { DollarSign, LogOut, User, Home, BarChart3 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-// import { useAuth } from "@/contexts/AuthContext";
 import { useUser } from "@civic/auth/react";
 
 const Navbar = () => {
@@ -37,8 +36,8 @@ const Navbar = () => {
                   key={item.path}
                   to={item.path}
                   className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105 ${isActive
-                      ? "bg-green-100 text-green-700 font-medium"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                    ? "bg-green-100 text-green-700 font-medium"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                     }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -74,8 +73,8 @@ const Navbar = () => {
                 key={item.path}
                 to={item.path}
                 className={`flex items-center space-x-2 px-3 py-2 rounded-lg whitespace-nowrap transition-all duration-200 ${isActive
-                    ? "bg-green-100 text-green-700 font-medium"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                  ? "bg-green-100 text-green-700 font-medium"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                   }`}
               >
                 <Icon className="w-4 h-4" />

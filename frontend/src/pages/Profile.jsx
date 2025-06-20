@@ -1,56 +1,80 @@
-
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/helper/auth";
+import Navbar from "@/components/Navbar";
+import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
-import Navbar from "@/components/Navbar";
-import { useUser } from "@civic/auth/react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import UpdateUserDataFunc from "../helper/UpdateUserDataFunc";
 
 const Profile = () => {
-  const { user } = useUser();
+  const { LoggedInUserData, setLoggedInUserData } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
     name: "",
-    salary: "",
-    riskProfile: "",
+    annualIncome: "",
+    riskTolerance: "",
   });
 
-  // useEffect(() => {
-  //   if (user) {
-  //     setFormData({
-  //       name: user.name || "",
-  //       salary: user.salary?.toString() || "",
-  //       riskProfile: user.riskProfile || "",
-  //     });
-  //   }
-  // }, [user, navigate]);
+  useEffect(() => {
+    if (LoggedInUserData) {
+      setFormData({
+        name: LoggedInUserData.name || "",
+        annualIncome: LoggedInUserData.annualIncome || "",
+        riskTolerance: LoggedInUserData.riskTolerance || "",
+      });
+    }
+  }, [LoggedInUserData]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // updateProfile({
-    //   name: formData.name,
-    //   salary: parseInt(formData.salary),
-    //   riskProfile: formData.riskProfile as 'conservative' | 'moderate' | 'aggressive',
-    // });
+    try {
+      const updatedData = {
+        ...LoggedInUserData,
+        name: formData.name,
+        annualIncome: parseFloat(formData.annualIncome),
+        riskTolerance: formData.riskTolerance,
+      };
 
-    toast({
-      title: "Profile updated!",
-      description: "Your information has been saved successfully.",
-    });
+      const result = await UpdateUserDataFunc(updatedData);
 
-    navigate("/dashboard");
+      setLoggedInUserData(result);
+
+      toast({
+        title: "Profile updated!",
+        description: "Your information has been saved successfully.",
+      });
+
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Failed to update user:", error);
+      toast({
+        title: "Error",
+        description: "Something went wrong while saving your data.",
+        variant: "destructive",
+      });
+    }
   };
 
-  if (!user) {
-    return null;
-  }
+  if (!LoggedInUserData) return null;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -71,20 +95,20 @@ const Profile = () => {
                   <Input
                     id="name"
                     value={formData.name}
-                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                     required
                     className="transition-all duration-200 focus:scale-105"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="salary">Monthly Salary (₹)</Label>
+                  <Label htmlFor="annualIncome">Annual Income (₹)</Label>
                   <Input
-                    id="salary"
+                    id="annualIncome"
                     type="number"
                     placeholder="20000"
-                    value={formData.salary}
-                    onChange={(e) => setFormData(prev => ({ ...prev, salary: e.target.value }))}
+                    value={formData.annualIncome}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, annualIncome: e.target.value }))}
                     required
                     className="transition-all duration-200 focus:scale-105"
                   />
@@ -94,28 +118,28 @@ const Profile = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="riskProfile">Investment Risk Profile</Label>
+                  <Label htmlFor="riskTolerance">Investment Risk Profile</Label>
                   <Select
-                    value={formData.riskProfile}
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, riskProfile: value }))}
+                    value={formData.riskTolerance}
+                    onValueChange={(value) => setFormData((prev) => ({ ...prev, riskTolerance: value }))}
                   >
                     <SelectTrigger className="transition-all duration-200 focus:scale-105">
                       <SelectValue placeholder="Select your risk tolerance" />
                     </SelectTrigger>
                     <SelectContent className="bg-white">
-                      <SelectItem value="conservative">
+                      <SelectItem value="Low">
                         <div>
                           <div className="font-medium">Conservative</div>
                           <div className="text-sm text-gray-600">Low risk, stable returns (FD, Bonds)</div>
                         </div>
                       </SelectItem>
-                      <SelectItem value="moderate">
+                      <SelectItem value="Medium">
                         <div>
                           <div className="font-medium">Moderate</div>
                           <div className="text-sm text-gray-600">Balanced risk, steady growth (SIP, Mutual Funds)</div>
                         </div>
                       </SelectItem>
-                      <SelectItem value="aggressive">
+                      <SelectItem value="High">
                         <div>
                           <div className="font-medium">Aggressive</div>
                           <div className="text-sm text-gray-600">High risk, high returns (Stocks, Trading)</div>

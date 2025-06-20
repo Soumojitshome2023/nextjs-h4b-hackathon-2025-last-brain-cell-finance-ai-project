@@ -19,24 +19,24 @@ const AIRecommendations = () => {
           <CardDescription>Complete your profile to get personalized suggestions</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-600">Please update your salary and risk profile to receive AI-powered investment recommendations.</p>
+          <p className="text-gray-600">Please update your annualIncome and risk profile to receive AI-powered investment recommendations.</p>
         </CardContent>
       </Card>
     );
   }
 
-  const salary = user?.salary;
-  const riskProfile = user?.riskProfile || 'moderate';
+  const annualIncome = user?.annualIncome;
+  const riskTolerance = user?.riskTolerance || 'moderate';
 
-  // AI Logic for recommendations based on salary and risk profile
+  // AI Logic for recommendations based on annualIncome and risk profile
   const getRecommendations = () => {
     const recommendations = [];
 
     // Emergency Fund (universal recommendation)
-    const emergencyFund = salary * 6;
+    const emergencyFund = annualIncome * 6;
     recommendations.push({
       type: "Emergency Fund",
-      description: `Build an emergency fund of ₹${emergencyFund.toLocaleString()} (6 months of salary)`,
+      description: `Build an emergency fund of ₹${emergencyFund.toLocaleString()} (6 months of annualIncome)`,
       allocation: "20% of income",
       risk: "Low",
       icon: Shield,
@@ -45,11 +45,11 @@ const AIRecommendations = () => {
     });
 
     // Risk-based recommendations
-    if (riskProfile === 'conservative') {
+    if (riskTolerance === 'conservative') {
       recommendations.push(
         {
           type: "Fixed Deposit",
-          description: `Invest ₹${(salary * 0.3).toLocaleString()} monthly in FDs for guaranteed returns`,
+          description: `Invest ₹${(annualIncome * 0.3).toLocaleString()} monthly in FDs for guaranteed returns`,
           allocation: "30% of income",
           risk: "Very Low",
           icon: Shield,
@@ -58,7 +58,7 @@ const AIRecommendations = () => {
         },
         {
           type: "PPF",
-          description: `Invest ₹${Math.min(salary * 0.2, 12500).toLocaleString()} monthly in PPF for tax benefits`,
+          description: `Invest ₹${Math.min(annualIncome * 0.2, 12500).toLocaleString()} monthly in PPF for tax benefits`,
           allocation: "20% of income",
           risk: "Low",
           icon: TrendingUp,
@@ -66,11 +66,11 @@ const AIRecommendations = () => {
           priority: "Medium"
         }
       );
-    } else if (riskProfile === 'moderate') {
+    } else if (riskTolerance === 'moderate') {
       recommendations.push(
         {
           type: "SIP in Mutual Funds",
-          description: `Start SIP of ₹${(salary * 0.25).toLocaleString()} in diversified equity funds`,
+          description: `Start SIP of ₹${(annualIncome * 0.25).toLocaleString()} in diversified equity funds`,
           allocation: "25% of income",
           risk: "Medium",
           icon: TrendingUp,
@@ -79,7 +79,7 @@ const AIRecommendations = () => {
         },
         {
           type: "ELSS",
-          description: `Invest ₹${Math.min(salary * 0.15, 12500).toLocaleString()} in ELSS for tax savings`,
+          description: `Invest ₹${Math.min(annualIncome * 0.15, 12500).toLocaleString()} in ELSS for tax savings`,
           allocation: "15% of income",
           risk: "Medium",
           icon: Zap,
@@ -87,11 +87,11 @@ const AIRecommendations = () => {
           priority: "Medium"
         }
       );
-    } else if (riskProfile === 'aggressive') {
+    } else if (riskTolerance === 'aggressive') {
       recommendations.push(
         {
           type: "Direct Equity",
-          description: `Allocate ₹${(salary * 0.3).toLocaleString()} for direct stock investments`,
+          description: `Allocate ₹${(annualIncome * 0.3).toLocaleString()} for direct stock investments`,
           allocation: "30% of income",
           risk: "High",
           icon: Zap,
@@ -100,7 +100,7 @@ const AIRecommendations = () => {
         },
         {
           type: "Growth Mutual Funds",
-          description: `Invest ₹${(salary * 0.2).toLocaleString()} in small & mid-cap funds`,
+          description: `Invest ₹${(annualIncome * 0.2).toLocaleString()} in small & mid-cap funds`,
           allocation: "20% of income",
           risk: "High",
           icon: TrendingUp,
@@ -123,7 +123,7 @@ const AIRecommendations = () => {
           <span>AI Recommendations</span>
         </CardTitle>
         <CardDescription>
-          Personalized investment suggestions based on your ₹{salary.toLocaleString()} salary and {riskProfile} risk profile
+          Personalized investment suggestions based on your ₹{annualIncome.toLocaleString()} annualIncome and {riskTolerance} risk profile
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -159,9 +159,9 @@ const AIRecommendations = () => {
             <span className="font-medium text-blue-900">AI Insight</span>
           </div>
           <p className="text-sm text-blue-800">
-            {riskProfile === 'conservative'
+            {riskTolerance === 'conservative'
               ? "Your conservative approach is great for stability. Consider gradually increasing equity exposure as you become more comfortable."
-              : riskProfile === 'moderate'
+              : riskTolerance === 'moderate'
                 ? "Your balanced approach allows for good growth with manageable risk. Consider reviewing your portfolio quarterly."
                 : "Your aggressive strategy has high growth potential. Ensure you have adequate emergency funds before high-risk investments."
             }

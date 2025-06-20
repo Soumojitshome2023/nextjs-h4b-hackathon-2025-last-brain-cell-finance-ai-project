@@ -9,20 +9,18 @@ import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import ExpenseTracker from "./pages/ExpenseTracker";
-import { AuthProvider } from "./contexts/AuthContext";
 import { CivicAuthProvider, UserButton } from "@civic/auth/react";
+import { AuthUserProvider } from "./helper/auth";
 
 const queryClient = new QueryClient();
 
 const App = () => (
-  <CivicAuthProvider
-    clientId="53dc2d0f-9b95-47fb-890c-0b46686d16f2"
-    displayMode="redirect"
-    redirectUrl={`${import.meta.env.VITE_BaseUrl}/profile`}
-  >
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <AuthProvider>
+  <AuthUserProvider>
+    <CivicAuthProvider
+      clientId={import.meta.env.VITE_CivicClientID}
+    >
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -34,10 +32,11 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
-        </AuthProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </CivicAuthProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </CivicAuthProvider>
+
+  </AuthUserProvider>
 );
 
 export default App;

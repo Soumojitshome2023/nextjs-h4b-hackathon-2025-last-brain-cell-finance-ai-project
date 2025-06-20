@@ -1,11 +1,16 @@
 
+import { useAuth } from "@/helper/auth";
+import { Link } from "react-router-dom";
+import { useUser } from "@civic/auth/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowUp, DollarSign, TrendingUp, Shield, Bot, BarChart3 } from "lucide-react";
-import { Link } from "react-router-dom";
 import { CivicAuthProvider, UserButton } from "@civic/auth/react";
+import { ArrowUp, DollarSign, TrendingUp, Shield, Bot, BarChart3 } from "lucide-react";
 
 const Index = () => {
+  const { signIn, signOut } = useUser();
+  const { LoggedInUserData } = useAuth();
+
   return (
     <div className="min-h-screen">
       {/* Header */}
@@ -30,11 +35,19 @@ const Index = () => {
             Track your expenses, get personalized investment suggestions, and make smarter financial decisions with our encrypted AI platform.
           </p>
           <div className="flex justify-center space-x-4 animate-slide-up">
-            <Link to="/register">
-              <Button className="gradient-bg text-white px-8 py-3 text-lg hover:opacity-90">
-                Start Free Trial
-              </Button>
-            </Link>
+            {LoggedInUserData ?
+              <Link to="/profile">
+                <Button className="gradient-bg text-white px-8 py-3 text-lg hover:opacity-90">
+                  Start Free Trial
+                </Button>
+              </Link>
+              :
+              <button onClick={signIn} >
+                <Button className="gradient-bg text-white px-8 py-3 text-lg hover:opacity-90">
+                  Start Free Trial
+                </Button>
+              </button>
+            }
             <Button variant="outline" className="px-8 py-3 text-lg">
               Learn More
             </Button>

@@ -1,34 +1,46 @@
-
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/helper/auth";
+import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { TrendingUp, DollarSign, Target, Bot, AlertCircle, Plus } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
-import Navbar from "@/components/Navbar";
-import AIRecommendations from "@/components/AIRecommendations";
 import ExpenseSummary from "@/components/ExpenseSummary";
-import { useUser } from "@civic/auth/react";
+import AIRecommendations from "@/components/AIRecommendations";
+import {
+  TrendingUp,
+  DollarSign,
+  Target,
+  Bot,
+  AlertCircle,
+  Plus
+} from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
 
 const Dashboard = () => {
-  const { user } = useUser();
-  const navigate = useNavigate();
+  const { LoggedInUserData } = useAuth();
+  const [totalExpenses, setTotalExpenses] = useState(0);
+  const [budgetPercentage, setBudgetPercentage] = useState(0);
 
-  // useEffect(() => {
-  //   if (!isAuthenticated) {
-  //     navigate("/login");
-  //   }
-  // }, [isAuthenticated, navigate]);
+  const monthlyAnnualIncome = LoggedInUserData?.annualIncome || 0;
 
-  if (!user) {
-    return null;
-  }
+  useEffect(() => {
+    const expenses = LoggedInUserData?.monthlyExpense || 0;
+    const total = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+    const percent = monthlyAnnualIncome > 0 ? (total / monthlyAnnualIncome) * 100 : 0;
 
-  const monthlySalary = 0;
-  const expenses = JSON.parse(localStorage.getItem("expenses") || "[]");
-  const totalExpenses = expenses.reduce((sum: number, expense: any) => sum + expense.amount, 0);
-  const remainingBudget = monthlySalary - totalExpenses;
-  const budgetPercentage = monthlySalary > 0 ? (totalExpenses / monthlySalary) * 100 : 0;
+    setTotalExpenses(total);
+    setBudgetPercentage(percent);
+  }, [monthlyAnnualIncome]);
+
+  if (!LoggedInUserData) return null;
+
+  const remainingBudget = monthlyAnnualIncome - totalExpenses;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -38,7 +50,7 @@ const Dashboard = () => {
         {/* Welcome Section */}
         <div className="animate-fade-in">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {user.name}! 👋
+            Welcome back, {LoggedInUserData.name}! 👋
           </h1>
           <p className="text-gray-600">
             Here's your financial overview and AI-powered recommendations.
@@ -51,8 +63,8 @@ const Dashboard = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Monthly Salary</p>
-                  <p className="text-2xl font-bold text-gray-900">₹{monthlySalary.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-gray-600">Monthly Income</p>
+                  <p className="text-2xl font-bold text-gray-900">₹{monthlyAnnualIncome}</p>
                 </div>
                 <div className="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center">
                   <DollarSign className="w-6 h-6 text-white" />
@@ -66,7 +78,7 @@ const Dashboard = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Total Expenses</p>
-                  <p className="text-2xl font-bold text-red-600">₹{totalExpenses.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-red-600">₹{totalExpenses}</p>
                 </div>
                 <div className="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center">
                   <TrendingUp className="w-6 h-6 text-white" />
@@ -80,7 +92,7 @@ const Dashboard = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Remaining Budget</p>
-                  <p className="text-2xl font-bold text-green-600">₹{remainingBudget.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-green-600">₹{remainingBudget}</p>
                 </div>
                 <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
                   <Target className="w-6 h-6 text-white" />
@@ -115,8 +127,8 @@ const Dashboard = () => {
           <CardContent>
             <div className="space-y-4">
               <div className="flex justify-between text-sm text-gray-600">
-                <span>Budget Used: ₹{totalExpenses.toLocaleString()}</span>
-                <span>Total Budget: ₹{monthlySalary.toLocaleString()}</span>
+                <span>Budget Used: ₹{totalExpenses}</span>
+                <span>Total Budget: ₹{monthlyAnnualIncome}</span>
               </div>
               <Progress
                 value={Math.min(budgetPercentage, 100)}
@@ -135,10 +147,7 @@ const Dashboard = () => {
         </Card>
 
         <div className="grid lg:grid-cols-2 gap-6">
-          {/* AI Recommendations */}
           <AIRecommendations />
-
-          {/* Recent Expenses */}
           <ExpenseSummary />
         </div>
 

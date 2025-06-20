@@ -1,31 +1,22 @@
-
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import Navbar from "@/components/Navbar";
+import { useAuth } from "@/helper/auth";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Plus, Trash2, BarChart3, Calendar, DollarSign } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import Navbar from "@/components/Navbar";
-import { useUser } from "@civic/auth/react";
-
-interface Expense {
-  id: string;
-  description: string;
-  amount: number;
-  category: string;
-  date: string;
-}
+import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Plus, Trash2, BarChart3, Calendar, DollarSign } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const ExpenseTracker = () => {
-  const { user } = useUser();
+  const { LoggedInUserData, setLoggedInUserData } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [expenses, setExpenses] = useState([]);
   const [formData, setFormData] = useState({
     description: "",
     amount: "",
@@ -43,10 +34,10 @@ const ExpenseTracker = () => {
     setExpenses(savedExpenses);
   }, [navigate]);
 
-  const addExpense = (e: React.FormEvent) => {
+  const addExpense = (e) => {
     e.preventDefault();
 
-    const newExpense: Expense = {
+    const newExpense = {
       id: Date.now().toString(),
       description: formData.description,
       amount: parseFloat(formData.amount),
@@ -71,7 +62,7 @@ const ExpenseTracker = () => {
     });
   };
 
-  const deleteExpense = (id: string) => {
+  const deleteExpense = (id) => {
     const updatedExpenses = expenses.filter(expense => expense.id !== id);
     setExpenses(updatedExpenses);
     localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
@@ -82,8 +73,8 @@ const ExpenseTracker = () => {
     });
   };
 
-  const getCategoryColor = (category: string) => {
-    const colors: Record<string, string> = {
+  const getCategoryColor = (category) => {
+    const colors = {
       "Food": "bg-orange-100 text-orange-800",
       "Transportation": "bg-blue-100 text-blue-800",
       "Entertainment": "bg-purple-100 text-purple-800",
@@ -104,9 +95,8 @@ const ExpenseTracker = () => {
     return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
   });
   const monthlyTotal = monthlyExpenses.reduce((sum, expense) => sum + expense.amount, 0);
-  if (!user) {
-    return null;
-  }
+
+  if (!LoggedInUserData) return null;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -183,7 +173,6 @@ const ExpenseTracker = () => {
                     value={formData.description}
                     onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                     required
-                    className="transition-all duration-200 focus:scale-105"
                   />
                 </div>
 
@@ -198,7 +187,6 @@ const ExpenseTracker = () => {
                       value={formData.amount}
                       onChange={(e) => setFormData(prev => ({ ...prev, amount: e.target.value }))}
                       required
-                      className="transition-all duration-200 focus:scale-105"
                     />
                   </div>
 
@@ -210,7 +198,6 @@ const ExpenseTracker = () => {
                       value={formData.date}
                       onChange={(e) => setFormData(prev => ({ ...prev, date: e.target.value }))}
                       required
-                      className="transition-all duration-200 focus:scale-105"
                     />
                   </div>
                 </div>
@@ -221,10 +208,10 @@ const ExpenseTracker = () => {
                     value={formData.category}
                     onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
                   >
-                    <SelectTrigger className="transition-all duration-200 focus:scale-105">
+                    <SelectTrigger>
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white">
+                    <SelectContent>
                       {categories.map((category) => (
                         <SelectItem key={category} value={category}>
                           {category}
@@ -234,10 +221,7 @@ const ExpenseTracker = () => {
                   </Select>
                 </div>
 
-                <Button
-                  type="submit"
-                  className="w-full gradient-bg text-white hover:opacity-90 transition-all duration-200 hover:scale-105"
-                >
+                <Button type="submit" className="w-full gradient-bg text-white">
                   <Plus className="w-4 h-4 mr-2" />
                   Add Expense
                 </Button>

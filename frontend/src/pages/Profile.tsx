@@ -5,45 +5,40 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
+import { useUser } from "@civic/auth/react";
 
 const Profile = () => {
-  const { user, updateProfile, isAuthenticated } = useAuth();
+  const { user } = useUser();
   const navigate = useNavigate();
   const { toast } = useToast();
-  
+
   const [formData, setFormData] = useState({
     name: "",
     salary: "",
     riskProfile: "",
   });
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-      return;
-    }
-    
-    if (user) {
-      setFormData({
-        name: user.name || "",
-        salary: user.salary?.toString() || "",
-        riskProfile: user.riskProfile || "",
-      });
-    }
-  }, [user, isAuthenticated, navigate]);
+  // useEffect(() => {
+  //   if (user) {
+  //     setFormData({
+  //       name: user.name || "",
+  //       salary: user.salary?.toString() || "",
+  //       riskProfile: user.riskProfile || "",
+  //     });
+  //   }
+  // }, [user, navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    updateProfile({
-      name: formData.name,
-      salary: parseInt(formData.salary),
-      riskProfile: formData.riskProfile as 'conservative' | 'moderate' | 'aggressive',
-    });
+
+    // updateProfile({
+    //   name: formData.name,
+    //   salary: parseInt(formData.salary),
+    //   riskProfile: formData.riskProfile as 'conservative' | 'moderate' | 'aggressive',
+    // });
 
     toast({
       title: "Profile updated!",
@@ -53,7 +48,7 @@ const Profile = () => {
     navigate("/dashboard");
   };
 
-  if (!isAuthenticated) {
+  if (!user) {
     return null;
   }
 

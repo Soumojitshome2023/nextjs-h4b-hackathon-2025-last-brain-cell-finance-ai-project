@@ -2,11 +2,13 @@
 import { Button } from "@/components/ui/button";
 import { DollarSign, LogOut, User, Home, BarChart3 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+// import { useAuth } from "@/contexts/AuthContext";
+import { useUser } from "@civic/auth/react";
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  // const { logout } = useAuth();
   const location = useLocation();
+  const { user } = useUser();
 
   const navItems = [
     { path: "/dashboard", label: "Dashboard", icon: Home },
@@ -29,16 +31,15 @@ const Navbar = () => {
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
-              
+
               return (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105 ${
-                    isActive
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105 ${isActive
                       ? "bg-green-100 text-green-700 font-medium"
                       : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   <Icon className="w-4 h-4" />
                   <span>{item.label}</span>
@@ -51,14 +52,14 @@ const Navbar = () => {
             <span className="text-sm text-gray-600 hidden md:block">
               Welcome, {user?.name}
             </span>
-            <Button
+            {/* <Button
               onClick={logout}
               variant="outline"
               className="flex items-center space-x-2 hover:scale-105 transition-all duration-200"
             >
               <LogOut className="w-4 h-4" />
               <span>Logout</span>
-            </Button>
+            </Button> */}
           </div>
         </div>
 
@@ -67,16 +68,15 @@ const Navbar = () => {
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
-            
+
             return (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center space-x-2 px-3 py-2 rounded-lg whitespace-nowrap transition-all duration-200 ${
-                  isActive
+                className={`flex items-center space-x-2 px-3 py-2 rounded-lg whitespace-nowrap transition-all duration-200 ${isActive
                     ? "bg-green-100 text-green-700 font-medium"
                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 <Icon className="w-4 h-4" />
                 <span>{item.label}</span>

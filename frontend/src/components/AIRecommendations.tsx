@@ -3,12 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Bot, TrendingUp, Shield, Zap } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
+import { useUser } from "@civic/auth/react";
 
 const AIRecommendations = () => {
-  const { user } = useAuth();
-  
-  if (!user || !user.salary) {
+  const { user } = useUser();
+
+  if (!user) {
     return (
       <Card className="animate-slide-up glass-effect">
         <CardHeader>
@@ -25,13 +25,13 @@ const AIRecommendations = () => {
     );
   }
 
-  const salary = user.salary;
-  const riskProfile = user.riskProfile || 'moderate';
-  
+  const salary = user?.salary;
+  const riskProfile = user?.riskProfile || 'moderate';
+
   // AI Logic for recommendations based on salary and risk profile
   const getRecommendations = () => {
     const recommendations = [];
-    
+
     // Emergency Fund (universal recommendation)
     const emergencyFund = salary * 6;
     recommendations.push({
@@ -60,7 +60,7 @@ const AIRecommendations = () => {
           type: "PPF",
           description: `Invest ₹${Math.min(salary * 0.2, 12500).toLocaleString()} monthly in PPF for tax benefits`,
           allocation: "20% of income",
-          risk: "Low", 
+          risk: "Low",
           icon: TrendingUp,
           color: "bg-indigo-500",
           priority: "Medium"
@@ -80,7 +80,7 @@ const AIRecommendations = () => {
         {
           type: "ELSS",
           description: `Invest ₹${Math.min(salary * 0.15, 12500).toLocaleString()} in ELSS for tax savings`,
-          allocation: "15% of income", 
+          allocation: "15% of income",
           risk: "Medium",
           icon: Zap,
           color: "bg-orange-500",
@@ -152,18 +152,18 @@ const AIRecommendations = () => {
             </div>
           );
         })}
-        
+
         <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
           <div className="flex items-center space-x-2 mb-2">
             <Bot className="w-5 h-5 text-blue-600" />
             <span className="font-medium text-blue-900">AI Insight</span>
           </div>
           <p className="text-sm text-blue-800">
-            {riskProfile === 'conservative' 
+            {riskProfile === 'conservative'
               ? "Your conservative approach is great for stability. Consider gradually increasing equity exposure as you become more comfortable."
               : riskProfile === 'moderate'
-              ? "Your balanced approach allows for good growth with manageable risk. Consider reviewing your portfolio quarterly."
-              : "Your aggressive strategy has high growth potential. Ensure you have adequate emergency funds before high-risk investments."
+                ? "Your balanced approach allows for good growth with manageable risk. Consider reviewing your portfolio quarterly."
+                : "Your aggressive strategy has high growth potential. Ensure you have adequate emergency funds before high-risk investments."
             }
           </p>
         </div>

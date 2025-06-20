@@ -4,27 +4,27 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { TrendingUp, DollarSign, Target, Bot, AlertCircle, Plus } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import AIRecommendations from "@/components/AIRecommendations";
 import ExpenseSummary from "@/components/ExpenseSummary";
+import { useUser } from "@civic/auth/react";
 
 const Dashboard = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user } = useUser();
   const navigate = useNavigate();
-  
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
-  }, [isAuthenticated, navigate]);
 
-  if (!isAuthenticated || !user) {
+  // useEffect(() => {
+  //   if (!isAuthenticated) {
+  //     navigate("/login");
+  //   }
+  // }, [isAuthenticated, navigate]);
+
+  if (!user) {
     return null;
   }
 
-  const monthlySalary = user.salary || 0;
+  const monthlySalary = 0;
   const expenses = JSON.parse(localStorage.getItem("expenses") || "[]");
   const totalExpenses = expenses.reduce((sum: number, expense: any) => sum + expense.amount, 0);
   const remainingBudget = monthlySalary - totalExpenses;
@@ -33,7 +33,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      
+
       <div className="container mx-auto p-6 space-y-6">
         {/* Welcome Section */}
         <div className="animate-fade-in">
@@ -118,8 +118,8 @@ const Dashboard = () => {
                 <span>Budget Used: ₹{totalExpenses.toLocaleString()}</span>
                 <span>Total Budget: ₹{monthlySalary.toLocaleString()}</span>
               </div>
-              <Progress 
-                value={Math.min(budgetPercentage, 100)} 
+              <Progress
+                value={Math.min(budgetPercentage, 100)}
                 className="w-full h-3"
               />
               {budgetPercentage > 80 && (
@@ -137,7 +137,7 @@ const Dashboard = () => {
         <div className="grid lg:grid-cols-2 gap-6">
           {/* AI Recommendations */}
           <AIRecommendations />
-          
+
           {/* Recent Expenses */}
           <ExpenseSummary />
         </div>

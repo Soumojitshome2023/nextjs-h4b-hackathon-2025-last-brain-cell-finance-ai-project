@@ -7,10 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Trash2, BarChart3, Calendar, DollarSign } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
+import { useUser } from "@civic/auth/react";
 
 interface Expense {
   id: string;
@@ -21,10 +21,10 @@ interface Expense {
 }
 
 const ExpenseTracker = () => {
-  const { isAuthenticated } = useAuth();
+  const { user } = useUser();
   const navigate = useNavigate();
   const { toast } = useToast();
-  
+
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [formData, setFormData] = useState({
     description: "",
@@ -34,23 +34,18 @@ const ExpenseTracker = () => {
   });
 
   const categories = [
-    "Food", "Transportation", "Entertainment", "Shopping", 
+    "Food", "Transportation", "Entertainment", "Shopping",
     "Bills", "Healthcare", "Education", "Other"
   ];
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-      return;
-    }
-
     const savedExpenses = JSON.parse(localStorage.getItem("expenses") || "[]");
     setExpenses(savedExpenses);
-  }, [isAuthenticated, navigate]);
+  }, [navigate]);
 
   const addExpense = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const newExpense: Expense = {
       id: Date.now().toString(),
       description: formData.description,
@@ -80,7 +75,7 @@ const ExpenseTracker = () => {
     const updatedExpenses = expenses.filter(expense => expense.id !== id);
     setExpenses(updatedExpenses);
     localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
-    
+
     toast({
       title: "Expense deleted",
       description: "The expense has been removed from your records.",
@@ -91,7 +86,7 @@ const ExpenseTracker = () => {
     const colors: Record<string, string> = {
       "Food": "bg-orange-100 text-orange-800",
       "Transportation": "bg-blue-100 text-blue-800",
-      "Entertainment": "bg-purple-100 text-purple-800", 
+      "Entertainment": "bg-purple-100 text-purple-800",
       "Shopping": "bg-pink-100 text-pink-800",
       "Bills": "bg-red-100 text-red-800",
       "Healthcare": "bg-green-100 text-green-800",
@@ -109,15 +104,14 @@ const ExpenseTracker = () => {
     return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
   });
   const monthlyTotal = monthlyExpenses.reduce((sum, expense) => sum + expense.amount, 0);
-
-  if (!isAuthenticated) {
+  if (!user) {
     return null;
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      
+
       <div className="container mx-auto p-6 space-y-6">
         <div className="animate-fade-in">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Expense Tracker</h1>

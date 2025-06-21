@@ -30,7 +30,15 @@ export async function getFinancialAdvice({
 - AI-assessed Risk Profile: ${riskProfile}
 `;
 
-  const baseInstruction = `You are a financial advisor. Based on the profile below, give only 10-15 lines of **personalized, actionable advice**. Include asset suggestions, allocation %, and explain why those suit the user. Use Readme format`;
+  const baseInstruction = `
+  You are a certified financial advisor. Based on the following user profile, provide **10–15 lines** of **personalized, actionable financial advice** in markdown format. Include:
+
+- Recommended asset types (e.g., mutual funds, stocks, bonds, gold, real estate)
+- Suggested allocation in % (e.g., 40% mutual funds, 30% stocks)
+- Clear reasoning behind each choice based on user's profile
+- Advice should be practical and beginner-friendly
+- Do not repeat the user profile in the response
+`;
   const finalPrompt = `${baseInstruction}\n\n${formattedProfile}\n\n${customPrompt ? `\n🧠 Focus Topic: ${customPrompt}` : ""}`;
 
   try {

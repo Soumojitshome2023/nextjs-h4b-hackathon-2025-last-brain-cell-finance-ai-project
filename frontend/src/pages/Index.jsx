@@ -8,7 +8,7 @@ import { ArrowUp, DollarSign, TrendingUp, Shield, Bot, BarChart3 } from "lucide-
 
 const Index = () => {
   const { signIn, signOut } = useUser();
-  const { LoggedInUserData } = useAuth();
+  const { LoggedInUserData, FirstLoader } = useAuth();
 
   return (
     <div className="min-h-screen">
@@ -34,17 +34,21 @@ const Index = () => {
             Track your expenses, get personalized investment suggestions, and make smarter financial decisions with our encrypted AI platform.
           </p>
           <div className="flex justify-center space-x-4 animate-slide-up">
-            {LoggedInUserData ?
-              <Link to="/profile">
-                <Button className="gradient-bg text-white px-8 py-3 text-lg hover:opacity-90">
+            {FirstLoader ?
+              <div className="bg-gray-400 w-28 animate-pulse h-10 rounded-2xl" ></div>
+              :
+              LoggedInUserData ?
+                <Link to="/profile">
+                  <Button className="gradient-bg text-white px-8 py-3 text-lg hover:opacity-90">
+                    Start Free Trial
+                  </Button>
+                </Link>
+                :
+                <Button onClick={signIn} className="gradient-bg text-white px-8 py-3 text-lg hover:opacity-90">
                   Start Free Trial
                 </Button>
-              </Link>
-              :
-              <Button onClick={signIn} className="gradient-bg text-white px-8 py-3 text-lg hover:opacity-90">
-                Start Free Trial
-              </Button>
             }
+
             <Button variant="outline" className="px-8 py-3 text-lg">
               Learn More
             </Button>

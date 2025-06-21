@@ -19,6 +19,7 @@ const Profile = () => {
   const [formData, setFormData] = useState({
     name: "",
     annualIncome: "",
+    age: 22,
     riskTolerance: "",
   });
 
@@ -26,6 +27,7 @@ const Profile = () => {
     if (LoggedInUserData) {
       setFormData({
         name: LoggedInUserData.name || "",
+        age: LoggedInUserData.age || 22,
         annualIncome: LoggedInUserData.annualIncome || "",
         riskTolerance: LoggedInUserData.riskTolerance || "",
       });
@@ -39,6 +41,7 @@ const Profile = () => {
       const updatedData = {
         ...LoggedInUserData,
         annualIncome: formData.annualIncome,
+        age: formData.age,
         riskTolerance: formData.riskTolerance,
       };
 
@@ -88,6 +91,18 @@ const Profile = () => {
                   />
                 </div>
 
+                <div className="space-y-2">
+                  <Label htmlFor="annualIncome">Age</Label>
+                  <Input
+                    id="annualIncome"
+                    type="number"
+                    placeholder="20000"
+                    value={formData.age}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, age: e.target.value }))}
+                    required
+                    className="transition-all duration-200 focus:scale-105"
+                  />
+                </div>
                 <div className="space-y-2">
                   <Label htmlFor="annualIncome">Annual Income (₹)</Label>
                   <Input

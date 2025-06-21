@@ -14,7 +14,7 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <ChatButton />
+      {/* <ChatButton /> */}
       <header className="py-4 z-50 px-6 backdrop-blur-xl flex justify-between items-center fixed top-0 w-full">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">

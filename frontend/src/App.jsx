@@ -11,6 +11,7 @@ import Profile from "./pages/Profile";
 import ExpenseTracker from "./pages/ExpenseTracker";
 import { CivicAuthProvider, UserButton } from "@civic/auth/react";
 import { AuthUserProvider } from "./helper/auth";
+import ChatButton from "./components/ChatButton";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App = () => (
       clientId={import.meta.env.VITE_CivicClientID}
     >
       <QueryClientProvider client={queryClient}>
+        <ChatButton />
         <TooltipProvider>
           <Toaster />
           <Sonner />

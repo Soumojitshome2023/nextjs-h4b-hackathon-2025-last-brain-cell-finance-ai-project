@@ -1,5 +1,5 @@
 # 🚀 FinanceAI - AI-Powered Financial Intelligence Platform
-![image](https://github.com/user-attachments/assets/ccbc7b65-9fc8-4037-abab-146f291fe716)
+![image](./readmeAssets/home.png)
 
 ## 🏆 Hackathon Project Overview
 
@@ -21,11 +21,13 @@ In today's complex financial landscape, individuals struggle with:
 - **Intelligent Risk Assessment**: Advanced algorithm that considers age, income-to-expense ratios, savings, and user preferences
 - **Dynamic Investment Suggestions**: Real-time recommendations for SIPs, Fixed Deposits, and trading opportunities
 - **Natural Language Processing**: Conversational AI interface for complex financial queries
+![image](./readmeAssets/home.png)
 
 ### 🔐 Blockchain-Enhanced Security
 - **Civic Authentication**: Web3-based identity verification ensuring user privacy
 - **Encrypted Data Storage**: Bank-level security for sensitive financial information
 - **Decentralized Identity**: User control over personal data without third-party dependencies
+![image](./readmeAssets/auth.png)
 
 ### 📊 Smart Analytics
 - **Predictive Spending Patterns**: AI-powered expense categorization and trend analysis
@@ -261,9 +263,8 @@ VITE_BACKEND_URL=http://localhost:3000
 
 ## 📞 Contact
 
-- **Project Repository**: [GitHub Link]
-- **Live Demo**: [Deployment URL]
-- **Documentation**: [Docs Link]
+- **Project Repository**: [https://github.com/Soumojitshome2023/h4b-last-brain-cell](https://github.com/Soumojitshome2023/h4b-last-brain-cell)
+- **Live Demo**: [https://h4b-lastbraincell.vercel.app/](https://h4b-lastbraincell.vercel.app/)
 
 ---
 

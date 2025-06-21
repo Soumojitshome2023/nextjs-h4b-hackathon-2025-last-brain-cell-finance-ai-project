@@ -202,6 +202,20 @@ export default function AIRecommendations() {
           </div>
         </div>
 
+        <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <div className="flex items-center space-x-2 mb-2">
+            <Bot className="w-5 h-5 text-blue-600" />
+            <span className="font-medium text-blue-900">AI Insight</span>
+          </div>
+          <p className="text-sm text-blue-800">
+            {riskTolerance === 'Low'
+              ? "Your conservative approach is great for stability. Consider gradually increasing equity exposure."
+              : riskTolerance === 'Medium'
+                ? "Your balanced approach allows for good growth with manageable risk. Review your portfolio quarterly."
+                : "Your aggressive strategy has high growth potential. Ensure you have adequate emergency funds."}
+          </p>
+        </div>
+
         <Button onClick={fetchAllAICards} disabled={aiGenerating} className="w-full gradient-bg text-white hover:scale-105">
           {aiGenerating ? (
             <span className="flex items-center gap-2">
@@ -243,23 +257,7 @@ export default function AIRecommendations() {
           );
         })}
 
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <div className="flex items-center space-x-2 mb-2">
-            <Bot className="w-5 h-5 text-blue-600" />
-            <span className="font-medium text-blue-900">AI Insight</span>
-          </div>
-          <p className="text-sm text-blue-800">
-            {riskTolerance === 'Low'
-              ? "Your conservative approach is great for stability. Consider gradually increasing equity exposure."
-              : riskTolerance === 'Medium'
-                ? "Your balanced approach allows for good growth with manageable risk. Review your portfolio quarterly."
-                : "Your aggressive strategy has high growth potential. Ensure you have adequate emergency funds."}
-          </p>
-        </div>
 
-        <Button className="w-full mt-4 gradient-bg text-white hover:opacity-90 hover:scale-105">
-          Get Detailed Investment Plan
-        </Button>
       </CardContent>
     </Card>
   );

@@ -143,11 +143,11 @@ const Dashboard = () => {
                   Add Expense
                 </Button>
               </Link>
-              <Link to="/profile">
+              {/* <Link to="/profile">
                 <Button variant="outline" className="w-full transition-all duration-200 hover:scale-105">
                   Update Profile
                 </Button>
-              </Link>
+              </Link> */}
             </div>
           </CardContent>
         </Card>

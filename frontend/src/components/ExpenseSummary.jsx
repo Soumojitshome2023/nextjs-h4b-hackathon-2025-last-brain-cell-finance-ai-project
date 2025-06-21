@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { BarChart3, Plus, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
 const ExpenseSummary = () => {
   const { LoggedInUserData } = useAuth();
@@ -16,19 +16,30 @@ const ExpenseSummary = () => {
 
   const getCategoryColor = (category) => {
     const colors = {
-      "Food": "bg-orange-500",
-      "Transportation": "bg-blue-500",
-      "Entertainment": "bg-purple-500",
-      "Shopping": "bg-pink-500",
-      "Bills": "bg-red-500",
-      "Healthcare": "bg-green-500",
-      "Education": "bg-indigo-500",
-      "Other": "bg-gray-500"
+      "Food": "#FB923C",
+      "Transportation": "#3B82F6",
+      "Entertainment": "#A855F7",
+      "Shopping": "#EC4899",
+      "Bills": "#EF4444",
+      "Healthcare": "#10B981",
+      "Education": "#6366F1",
+      "Other": "#6B7280"
     };
-    return colors[category] || "bg-gray-500";
+    return colors[category] || "#6B7280";
   };
 
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+
+  const categorySummary = expenses.reduce((acc, item) => {
+    acc[item.category] = (acc[item.category] || 0) + item.amount;
+    return acc;
+  }, {});
+
+  const chartData = Object.entries(categorySummary).map(([category, amount]) => ({
+    name: category,
+    value: amount,
+    color: getCategoryColor(category)
+  }));
 
   return (
     <Card className="animate-slide-up glass-effect">
@@ -61,11 +72,34 @@ const ExpenseSummary = () => {
               <span className="font-bold text-red-600">₹{totalExpenses.toLocaleString()}</span>
             </div>
 
+            {/* Chart Area */}
+            <div className="w-full h-64">
+              <ResponsiveContainer>
+                <PieChart>
+                  <Pie
+                    data={chartData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    label
+                  >
+                    {chartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value) => `₹${value.toLocaleString()}`} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Expense List */}
             <div className="space-y-3">
               {expenses.map((expense) => (
                 <div key={expense._id} className="flex items-center justify-between p-3 border rounded-lg hover:shadow-md transition-all duration-200 hover:scale-105">
                   <div className="flex items-center space-x-3">
-                    <div className={`w-3 h-3 ${getCategoryColor(expense.category)} rounded-full`}></div>
+                    <div className={`w-3 h-3 rounded-full`} style={{ backgroundColor: getCategoryColor(expense.category) }}></div>
                     <div>
                       <p className="font-medium text-gray-900">{expense.description}</p>
                       <p className="text-sm text-gray-600">{expense.category} • {new Date(expense.date).toLocaleDateString()}</p>

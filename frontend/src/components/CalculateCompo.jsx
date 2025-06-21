@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Calculator,
@@ -38,6 +38,7 @@ import {
   RefreshCw
 } from 'lucide-react';
 import Navbar from './Navbar';
+import { useAuth } from '../helper/auth';
 
 // Tax calculation logic based on Indian tax slabs for FY 2025-26
 const calculateTax = (income, regime) => {
@@ -103,31 +104,7 @@ const calculateInterest = (principal, rate, time) => {
   return { simpleInterest, compoundInterest };
 };
 
-function Header() {
-  return (
-    <motion.header
-      className="bg-gradient-to-r from-green-600 to-emerald-600 shadow-lg"
-      initial={{ y: -50, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6 }}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
-            <Calculator className="w-8 h-8 text-white mr-2" />
-            <div>
-              <h1 className="text-xl font-bold text-white">TaxVox</h1>
-              <p className="text-xs text-green-100">by Finance AI</p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            <RotateCcw className="w-5 h-5 text-green-100 cursor-pointer hover:text-white transition-colors" />
-          </div>
-        </div>
-      </div>
-    </motion.header>
-  );
-}
+
 
 function Navigation({ activeTab, setActiveTab }) {
   const mainTabs = [
@@ -192,7 +169,8 @@ function Navigation({ activeTab, setActiveTab }) {
 }
 
 function TaxCalculator() {
-  const [income, setIncome] = useState('');
+  const { LoggedInUserData, setLoggedInUserData } = useAuth();
+  const [income, setIncome] = useState("");
   const [calculatorType, setCalculatorType] = useState('simple');
   const [results, setResults] = useState(null);
 
@@ -214,6 +192,11 @@ function TaxCalculator() {
       recommendedRegime: oldRegime.total < newRegime.total ? 'old' : 'new'
     });
   };
+
+  useEffect(() => {
+    setIncome(LoggedInUserData ? LoggedInUserData.annualIncome : "")
+  }, [LoggedInUserData])
+
 
   return (
     <div className="space-y-8">
@@ -1479,6 +1462,7 @@ function Changelog() {
 
 function CalculateCompo() {
   const [activeTab, setActiveTab] = useState('calculator');
+  const { LoggedInUserData, setLoggedInUserData } = useAuth();
 
   const renderContent = () => {
     switch (activeTab) {
@@ -1516,7 +1500,6 @@ function CalculateCompo() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50">
       <Navbar />
-      <Header />
       <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

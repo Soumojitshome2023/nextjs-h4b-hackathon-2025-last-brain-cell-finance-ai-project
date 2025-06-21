@@ -11,9 +11,11 @@ const AuthUserContext = createContext();
 export function useRajAuth() {
     const { user } = useUser();
     const [LoggedInUserData, setLoggedInUserData] = useState(null);
+    const [FirstLoader, setFirstLoader] = useState(true);
 
 
     useEffect(() => {
+        setFirstLoader(true);
         if (user) {
             const syncUserData = async () => {
                 try {
@@ -39,19 +41,24 @@ export function useRajAuth() {
                 } catch (error) {
                     console.error('Error syncing user data:', error.message);
                 }
+                finally {
+                    setFirstLoader(false);
+                }
             };
 
             syncUserData();
         }
         else {
             setLoggedInUserData(null);
+            setFirstLoader(false);
         }
     }, [user]);
 
 
     // ======================== Return ========================
     return {
-        LoggedInUserData, setLoggedInUserData
+        LoggedInUserData, setLoggedInUserData,
+        FirstLoader, setFirstLoader
 
     };
 }

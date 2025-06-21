@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import UpdateUserDataFunc from "../helper/UpdateUserDataFunc";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
+import NotFound from "./NotFound"
 
 const Profile = () => {
   const { LoggedInUserData, setLoggedInUserData } = useAuth();
@@ -62,7 +62,7 @@ const Profile = () => {
     }
   };
 
-  if (!LoggedInUserData) return null;
+  if (!LoggedInUserData) return <NotFound />;
 
   return (
     <div className="min-h-screen bg-gray-50">

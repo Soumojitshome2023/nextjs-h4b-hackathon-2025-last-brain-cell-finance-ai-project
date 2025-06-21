@@ -8,11 +8,12 @@ import ExpenseSummary from "@/components/ExpenseSummary";
 import AIRecommendations from "@/components/AIRecommendations";
 import { TrendingUp, DollarSign, Target, Bot, AlertCircle, Plus } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import NotFound from "./NotFound"
 
 const Dashboard = () => {
   const { LoggedInUserData } = useAuth();
 
-  if (!LoggedInUserData) return null;
+  if (!LoggedInUserData) return <NotFound />;
 
   const monthlyAnnualIncome = LoggedInUserData?.annualIncome || 0;
   const expenses = LoggedInUserData?.expenses || [];

@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import UpdateUserDataFunc from "../helper/UpdateUserDataFunc";
 import SendMailFunc from "../helper/SendMailFunc";
+import NotFound from "./NotFound"
 
 const ExpenseTracker = () => {
   const { LoggedInUserData, setLoggedInUserData } = useAuth();
@@ -125,7 +126,7 @@ const ExpenseTracker = () => {
   });
   const monthlyTotal = monthlyExpenses.reduce((sum, expense) => sum + expense.amount, 0);
 
-  if (!LoggedInUserData) return null;
+  if (!LoggedInUserData) return <NotFound />;
 
   return (
     <div className="min-h-screen bg-gray-50">

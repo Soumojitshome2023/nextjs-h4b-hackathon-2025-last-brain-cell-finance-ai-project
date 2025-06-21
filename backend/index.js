@@ -7,6 +7,7 @@ import {
   fetchUserByEmail,
   updateUserDetails
 } from './user.controller.js';
+import { SendMail } from './sendMail.controller.js';
 
 dotenv.config();
 const app = express();
@@ -52,6 +53,20 @@ app.post('/api/user/update', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
+app.post('/api/sendmail', async (req, res) => {
+  try {
+    const mailResponse = await SendMail(req.body);
+    if (mailResponse.success) {
+      res.status(200).json(mailResponse);
+    } else {
+      res.status(500).json(mailResponse);
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message || "Failed to send mail" });
+  }
+});
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

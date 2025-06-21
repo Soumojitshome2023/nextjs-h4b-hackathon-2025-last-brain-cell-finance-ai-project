@@ -11,6 +11,7 @@ import { Plus, Trash2, BarChart3, Calendar, DollarSign } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import UpdateUserDataFunc from "../helper/UpdateUserDataFunc";
+import SendMailFunc from "../helper/SendMailFunc";
 
 const ExpenseTracker = () => {
   const { LoggedInUserData, setLoggedInUserData } = useAuth();
@@ -49,7 +50,29 @@ const ExpenseTracker = () => {
       expenses: updatedExpenses
     });
 
+
     setLoggedInUserData(result);
+
+    const totalExpenses = result?.expenses.reduce((sum, expense) => sum + expense.amount, 0);
+    const annualIncome = result?.annualIncome || 0;
+    const budgetPercentage = result?.annualIncome > 0 ? (totalExpenses / annualIncome) * 100 : 0;
+
+    if (budgetPercentage > 50) {
+      const mailPayload = {
+        email: result.email, // or the appropriate email key
+        subject: "Budget Alert: You're spending over 50% of your monthly income!",
+        html: `
+      <h2>⚠️ Budget Alert</h2>
+      <p>Hi ${result.name || 'User'},</p>
+      <p>You've spent <strong>${budgetPercentage.toFixed(2)}%</strong> of your Annual Income (${annualIncome.toFixed(2)}), which exceeds the safe threshold.</p>
+      <p>Please consider reviewing your spending habits.</p>
+      <p>- Your Finance Tracker</p>
+    `,
+        BccArr: []
+      };
+
+      SendMailFunc(mailPayload)
+    }
 
     toast({
       title: "Expense added!",

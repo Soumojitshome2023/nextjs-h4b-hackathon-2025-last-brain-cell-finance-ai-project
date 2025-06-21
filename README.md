@@ -1,4 +1,5 @@
 # 🚀 FinanceAI - AI-Powered Financial Intelligence Platform
+![image](https://github.com/user-attachments/assets/ccbc7b65-9fc8-4037-abab-146f291fe716)
 
 ## 🏆 Hackathon Project Overview
 

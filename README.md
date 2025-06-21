@@ -50,6 +50,9 @@ In today's complex financial landscape, individuals struggle with:
 - **CORS** configuration for cross-origin requests
 - **Environment-based configuration** for different deployment stages
 
+### Auth
+- **Civic Auth** For providing a streamlined way to integrate authentication into applications
+
 ### AI Integration
 - **Google Gemini 2.5 Flash** for advanced financial advice generation
 - **Custom Risk Profiling Algorithm** with multi-factor analysis
@@ -99,6 +102,7 @@ In today's complex financial landscape, individuals struggle with:
 3. **AI Recommendations**: Personalized investment advice based on profile
 4. **Profile Management**: Comprehensive financial profile setup
 5. **Security Center**: Transparent data handling and privacy controls
+6. **Ai Chatbot**: AI designed to accurately predict future market trends and overall price movements across various financial sectors
 
 ## 🌟 Impact and Potential
 

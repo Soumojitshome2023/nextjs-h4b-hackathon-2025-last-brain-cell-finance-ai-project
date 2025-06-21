@@ -12,6 +12,7 @@ import ExpenseTracker from "./pages/ExpenseTracker";
 import { CivicAuthProvider, UserButton } from "@civic/auth/react";
 import { AuthUserProvider } from "./helper/auth";
 import ChatButton from "./components/ChatButton";
+import CalculateCompo from "./components/CalculateCompo";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/expenses" element={<ExpenseTracker />} />
+              <Route path="/calculate" element={<CalculateCompo />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

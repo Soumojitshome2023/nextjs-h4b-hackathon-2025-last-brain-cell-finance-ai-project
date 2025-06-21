@@ -1,6 +1,6 @@
 import { useUser } from "@civic/auth/react";
 import { Link, useLocation } from "react-router-dom";
-import { DollarSign, LogOut, User, Home, BarChart3 } from "lucide-react";
+import { DollarSign, LogOut, User, Home, BarChart3, Calculator } from "lucide-react";
 
 const Navbar = () => {
   const location = useLocation();
@@ -10,6 +10,7 @@ const Navbar = () => {
     { path: "/dashboard", label: "Dashboard", icon: Home },
     { path: "/expenses", label: "Expenses", icon: BarChart3 },
     { path: "/profile", label: "Profile", icon: User },
+    { path: "/calculate", label: "Calculate", icon: Calculator },
   ];
 
   return (

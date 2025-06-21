@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./readmeAssets/logo.png" alt="FinanceAI Home" width="600"/>
+  <img src="./readmeAssets/Logo.png" alt="FinanceAI Home" width="600"/>
 </p>
 
 

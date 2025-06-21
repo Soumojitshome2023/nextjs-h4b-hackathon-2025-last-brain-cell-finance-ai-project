@@ -42,12 +42,12 @@ const Index = () => {
               LoggedInUserData ?
                 <Link to="/profile">
                   <Button className="gradient-bg text-white px-8 py-3 text-lg hover:opacity-90">
-                    Start Free Trial
+                    Try FinanceAI
                   </Button>
                 </Link>
                 :
                 <Button onClick={signIn} className="gradient-bg text-white px-8 py-3 text-lg hover:opacity-90">
-                  Start Free Trial
+                  Try FinanceAI
                 </Button>
             }
 
@@ -152,7 +152,7 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="p-6 text-center text-gray-600 bg-gray-50">
-        <p>&copy; 2024 FinanceAI. Built for financial empowerment.</p>
+        <p>&copy; 2025 FinanceAI. Built for financial empowerment.</p>
       </footer>
     </div>
   );

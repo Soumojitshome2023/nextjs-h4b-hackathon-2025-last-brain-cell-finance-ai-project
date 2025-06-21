@@ -1,34 +1,66 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import remarkGfm from 'remark-gfm'
-import Markdown from 'react-markdown'
+import React, { useState } from "react";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { useAuth } from "@/helper/auth";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Bot, TrendingUp, Shield, Zap } from "lucide-react";
+import { Bot, Loader2, AlertCircle } from "lucide-react";
 import { getFinancialAdvice } from "../helper/GetFinancialAdvice";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
-const AIRecommendations = () => {
+const recommendationTypes = [
+  { key: "investment", label: "Investment Plan", hint: "Build long-term wealth using diversified assets." },
+  { key: "tax", label: "Tax Saving", hint: "Explore tax benefits via PPF, ELSS, etc." },
+  { key: "retirement", label: "Retirement Plan", hint: "Plan for retirement by age 60 with monthly targets." },
+  { key: "budgeting", label: "Monthly Budgeting", hint: "Save more by cutting unnecessary expenses." },
+];
+
+export default function AIRecommendations() {
   const { LoggedInUserData } = useAuth();
+  const [recommendationType, setRecommendationType] = useState("investment");
   const [aiAdvice, setAiAdvice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const [monthlyExpense, setMonthlyExpense] = useState("");
+  const [savings, setSavings] = useState("");
+  const [investmentHorizon, setInvestmentHorizon] = useState("");
+  const [financialGoal, setFinancialGoal] = useState("");
+  const [preferredAssets, setPreferredAssets] = useState("");
+
+  const promptMap = {
+    investment: `Give very short investment advice with 3–4 Indian asset types.`,
+    tax: `Give short tax-saving tips using Indian tax options like ELSS, PPF, 80C.`,
+    retirement: `Give short retirement planning advice for India by age 60.`,
+    budgeting: `Give short monthly budget tips to save more.`,
+  };
 
   const fetchAdvice = async () => {
+    if (!LoggedInUserData) return;
     setLoading(true);
+    setError("");
+    setAiAdvice("");
+
     const result = await getFinancialAdvice({
       age: LoggedInUserData.age,
       annualIncome: LoggedInUserData.annualIncome,
-      monthlyExpense: LoggedInUserData.monthlyExpense,
-      savings: LoggedInUserData.savings,
-      investmentHorizon: LoggedInUserData.investmentHorizon,
       riskTolerance: LoggedInUserData.riskTolerance,
-      financialGoal: LoggedInUserData.financialGoal || "Wealth Growth",
-      preferredAssets: LoggedInUserData.preferredAssets || "Mutual Funds, Gold",
-      apiKey: import.meta.env.VITE_GeminiAPI
+      monthlyExpense: parseInt(monthlyExpense) || 0,
+      savings: parseInt(savings) || 0,
+      investmentHorizon: parseInt(investmentHorizon) || 0,
+      financialGoal: financialGoal || "Wealth Growth",
+      preferredAssets: preferredAssets || "Mutual Funds, FD",
+      apiKey: import.meta.env.VITE_GeminiAPI, // ✅ safer and compatible with Next.js
+      customPrompt: promptMap[recommendationType],
     });
 
-    if (result.success) setAiAdvice(result.advice);
+    if (result.ok) {
+      setAiAdvice(result.advice);
+    } else {
+      setError(result.error);
+    }
+
     setLoading(false);
   };
 
@@ -40,10 +72,12 @@ const AIRecommendations = () => {
             <Bot className="w-5 h-5 text-blue-600" />
             AI Recommendations
           </CardTitle>
-          <CardDescription>Log in or complete your profile for insights.</CardDescription>
+          <CardDescription>
+            Complete your profile to receive personalized financial insights.
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <p>Please add age, income, expenses, savings and risk profile to get AI-powered advice.</p>
+          <p className="text-gray-600 text-sm">Update age, income, expenses, etc. to unlock advice.</p>
         </CardContent>
       </Card>
     );
@@ -52,32 +86,102 @@ const AIRecommendations = () => {
   return (
     <Card className="animate-slide-up glass-effect">
       <CardHeader>
-        <CardTitle className="flex items-center space-x-2">
+        <CardTitle className="flex items-center gap-2">
           <Bot className="w-5 h-5 text-blue-600" />
-          <span>AI Recommendations</span>
+          AI Recommendations
         </CardTitle>
         <CardDescription>
-          Based on your profile: ₹{LoggedInUserData.annualIncome.toLocaleString()} income, {LoggedInUserData.riskTolerance} risk
+          Income: ₹{LoggedInUserData.annualIncome.toLocaleString()} • Risk: {LoggedInUserData.riskTolerance}
         </CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {loading ? (
-          <p className="text-gray-500">Generating personalized advice...</p>
-        ) : (
-          <div className="text-sm whitespace-pre-wrap text-gray-800">
-            <Markdown remarkPlugins={[remarkGfm]}>
-              {aiAdvice}
-            </Markdown>
-          </div>
-        )}
+        {/* Type Selector */}
+        <div className="grid grid-cols-2 gap-2">
+          {recommendationTypes.map((type) => (
+            <Button
+              key={type.key}
+              variant={recommendationType === type.key ? "default" : "outline"}
+              onClick={() => setRecommendationType(type.key)}
+              className="text-sm py-2"
+            >
+              {type.label}
+            </Button>
+          ))}
+        </div>
 
-        <Button onClick={fetchAdvice} className="w-full mt-4 gradient-bg text-white hover:opacity-90 transition-all duration-200 hover:scale-105">
-          Get Detailed Investment Plan
+        <p className="text-sm text-muted-foreground italic">
+          {recommendationTypes.find(t => t.key === recommendationType)?.hint}
+        </p>
+
+        {/* Inputs */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <Input
+            type="number"
+            placeholder="Monthly Expenses (₹)"
+            value={monthlyExpense}
+            onChange={(e) => setMonthlyExpense(e.target.value)}
+          />
+          <Input
+            type="number"
+            placeholder="Total Current Savings (₹)"
+            value={savings}
+            onChange={(e) => setSavings(e.target.value)}
+          />
+          <Input
+            type="number"
+            placeholder="Investment Horizon (years)"
+            value={investmentHorizon}
+            onChange={(e) => setInvestmentHorizon(e.target.value)}
+          />
+          <Input
+            type="text"
+            placeholder="Financial Goal (e.g., Buy a house)"
+            value={financialGoal}
+            onChange={(e) => setFinancialGoal(e.target.value)}
+          />
+          <Input
+            type="text"
+            placeholder="Preferred Assets (e.g., Equity, FD)"
+            value={preferredAssets}
+            onChange={(e) => setPreferredAssets(e.target.value)}
+          />
+        </div>
+
+        {/* Button */}
+        <Button
+          onClick={fetchAdvice}
+          disabled={loading}
+          className="w-full gradient-bg text-white hover:scale-105 transition-all"
+        >
+          {loading ? (
+            <span className="flex items-center gap-2">
+              <Loader2 className="animate-spin w-4 h-4" />
+              Generating...
+            </span>
+          ) : "Get Advice"}
         </Button>
+
+        {/* Output */}
+        <div className="mt-4 text-sm text-gray-800 whitespace-pre-wrap">
+          {error && (
+            <div className="text-red-500 flex items-center gap-2 mb-2">
+              <AlertCircle className="w-4 h-4" />
+              {error}
+            </div>
+          )}
+
+          {!loading && !aiAdvice && !error && (
+            <p className="text-gray-400">Fill the fields and click “Get Advice”.</p>
+          )}
+
+          {!loading && aiAdvice && (
+            <div className="prose max-w-none prose-sm prose-blue">
+              <Markdown remarkPlugins={[remarkGfm]}>{aiAdvice}</Markdown>
+            </div>
+          )}
+        </div>
       </CardContent>
     </Card>
   );
-};
-
-export default AIRecommendations;
+}

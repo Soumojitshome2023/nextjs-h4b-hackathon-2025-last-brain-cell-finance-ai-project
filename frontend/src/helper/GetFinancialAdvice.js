@@ -1,5 +1,8 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
+/**
+ * Generate AI-based financial advice using Gemini
+ */
 export async function getFinancialAdvice({
   age,
   annualIncome,
@@ -9,61 +12,56 @@ export async function getFinancialAdvice({
   riskTolerance,
   financialGoal,
   preferredAssets = "",
-  apiKey
+  apiKey,
+  customPrompt = ""
 }) {
-  const riskProfile = assessRiskProfile({
-    age,
-    annualIncome,
-    monthlyExpense,
-    savings,
-    riskTolerance
-  });
+  const riskProfile = getRisk(age, annualIncome, monthlyExpense, savings, riskTolerance);
+
+  const formattedProfile = `
+👤 User Profile:
+- Age: ${age}
+- Annual Income: ₹${annualIncome.toLocaleString()}
+- Monthly Expense: ₹${monthlyExpense.toLocaleString()}
+- Total Savings: ₹${savings.toLocaleString()}
+- Investment Horizon: ${investmentHorizon} years
+- Financial Goal: ${financialGoal}
+- Preferred Assets: ${preferredAssets}
+- Self-assessed Risk Tolerance: ${riskTolerance}
+- AI-assessed Risk Profile: ${riskProfile}
+`;
+
+  const baseInstruction = `You are a financial advisor. Based on the profile below, give only 10-15 lines of **personalized, actionable advice**. Include asset suggestions, allocation %, and explain why those suit the user. Use Readme format`;
+  const finalPrompt = `${baseInstruction}\n\n${formattedProfile}\n\n${customPrompt ? `\n🧠 Focus Topic: ${customPrompt}` : ""}`;
 
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    const prompt = `
-You are a financial advisor AI. Based on the following user profile, provide personalized financial advice.
-Keep it clear, concise, and aligned with the user's risk tolerance and financial goals.
-Include a summary of their financial position and strategy for the goal. Add a note to consult a human financial advisor.
+    const result = await model.generateContent(finalPrompt);
+    const text = result.response.text().trim();
 
-User Profile:
-- Age: ${age}
-- Annual Income: ₹${annualIncome}
-- Monthly Expenses: ₹${monthlyExpense}
-- Current Savings: ₹${savings}
-- Investment Horizon: ${investmentHorizon} years
-- Risk Tolerance: ${riskProfile}
-- Financial Goal: ${financialGoal}
-- Preferred Assets: ${preferredAssets}
-
-Advice:
-    `.trim();
-
-    const result = await model.generateContent(prompt);
-    const text = result.response.text();
-    return { success: true, advice: text, riskProfile };
-  } catch (err) {
-    return { success: false, error: err.message };
+    return {
+      ok: true,
+      advice: `${text} ${formattedProfile}`,
+      risk: riskProfile,
+      profile: formattedProfile.trim()
+    };
+  } catch (e) {
+    return { ok: false, error: e.message || "Something went wrong" };
   }
 }
 
-function assessRiskProfile({ age, annualIncome, monthlyExpense, savings, riskTolerance }) {
-  let score = 0;
+/**
+ * Basic risk scoring based on age, expense ratio, savings, and user tolerance
+ */
+function getRisk(age, income, expense, savings, tolerance) {
+  let score = age < 30 ? 3 : age < 50 ? 2 : 1;
+  const monthlyIncome = income / 12;
+  const ratio = monthlyIncome ? expense / monthlyIncome : 1;
 
-  score += age < 30 ? 3 : age < 50 ? 2 : 1;
+  score += ratio < 0.5 ? 3 : ratio < 0.75 ? 2 : 1;
+  score += savings > income * 2 ? 3 : savings > income ? 2 : 1;
+  score += { low: 1, medium: 2, high: 3 }[tolerance?.toLowerCase()] || 2;
 
-  const incomeMonthly = annualIncome / 12;
-  const expenseRatio = incomeMonthly ? monthlyExpense / incomeMonthly : 1;
-  score += expenseRatio < 0.5 ? 3 : expenseRatio < 0.75 ? 2 : 1;
-
-  score += savings > annualIncome * 2 ? 3 : savings > annualIncome ? 2 : 1;
-
-  const map = { low: 1, medium: 2, high: 3 };
-  score += map[riskTolerance?.toLowerCase()] || 2;
-
-  if (score >= 10) return "High";
-  if (score >= 7) return "Medium";
-  return "Low";
+  return score >= 10 ? "High" : score >= 7 ? "Medium" : "Low";
 }

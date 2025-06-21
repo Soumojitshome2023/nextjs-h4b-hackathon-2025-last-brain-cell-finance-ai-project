@@ -4,10 +4,12 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useAuth } from "@/helper/auth";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Bot, Loader2, AlertCircle } from "lucide-react";
 import { getFinancialAdvice } from "../helper/GetFinancialAdvice";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const recommendationTypes = [
   { key: "investment", label: "Investment Plan", hint: "Build long-term wealth using diversified assets." },
@@ -28,6 +30,7 @@ export default function AIRecommendations() {
   const [investmentHorizon, setInvestmentHorizon] = useState("");
   const [financialGoal, setFinancialGoal] = useState("");
   const [preferredAssets, setPreferredAssets] = useState("");
+  const [riskTolerance, setriskTolerance] = useState("");
 
   const promptMap = {
     investment: `Give very short investment advice with 3–4 Indian asset types.`,
@@ -45,7 +48,7 @@ export default function AIRecommendations() {
     const result = await getFinancialAdvice({
       age: LoggedInUserData.age,
       annualIncome: LoggedInUserData.annualIncome,
-      riskTolerance: LoggedInUserData.riskTolerance,
+      riskTolerance: riskTolerance,
       monthlyExpense: parseInt(monthlyExpense) || 0,
       savings: parseInt(savings) || 0,
       investmentHorizon: parseInt(investmentHorizon) || 0,
@@ -140,12 +143,44 @@ export default function AIRecommendations() {
             value={financialGoal}
             onChange={(e) => setFinancialGoal(e.target.value)}
           />
-          <Input
+          {/* <Input
             type="text"
             placeholder="Preferred Assets (e.g., Equity, FD)"
             value={preferredAssets}
             onChange={(e) => setPreferredAssets(e.target.value)}
-          />
+          /> */}
+
+          <div className="space-y-2">
+            <Label htmlFor="riskTolerance">Investment Risk Profile</Label>
+            <Select
+              value={riskTolerance}
+              onValueChange={(value) => setriskTolerance(value)}
+            >
+              <SelectTrigger className="transition-all duration-200 focus:scale-105">
+                <SelectValue placeholder="Select your risk tolerance" />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                <SelectItem value="Low">
+                  <div>
+                    <div className="font-medium">Low</div>
+                    {/* <div className="text-sm text-gray-600">Low risk, stable returns (FD, Bonds)</div> */}
+                  </div>
+                </SelectItem>
+                <SelectItem value="Medium">
+                  <div>
+                    <div className="font-medium">Medium</div>
+                    {/* <div className="text-sm text-gray-600">Balanced risk, steady growth (SIP, Mutual Funds)</div> */}
+                  </div>
+                </SelectItem>
+                <SelectItem value="High">
+                  <div>
+                    <div className="font-medium">High</div>
+                    {/* <div className="text-sm text-gray-600">High risk, high returns (Stocks, Trading)</div> */}
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Button */}

@@ -20,7 +20,6 @@ const Profile = () => {
     name: "",
     annualIncome: "",
     age: 22,
-    riskTolerance: "",
   });
 
   useEffect(() => {
@@ -29,7 +28,6 @@ const Profile = () => {
         name: LoggedInUserData.name || "",
         age: LoggedInUserData.age || 22,
         annualIncome: LoggedInUserData.annualIncome || "",
-        riskTolerance: LoggedInUserData.riskTolerance || "",
       });
     }
   }, [LoggedInUserData]);
@@ -42,7 +40,6 @@ const Profile = () => {
         ...LoggedInUserData,
         annualIncome: formData.annualIncome,
         age: formData.age,
-        riskTolerance: formData.riskTolerance,
       };
 
       const result = await UpdateUserDataFunc(updatedData);
@@ -119,7 +116,7 @@ const Profile = () => {
                   </p>
                 </div>
 
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <Label htmlFor="riskTolerance">Investment Risk Profile</Label>
                   <Select
                     value={formData.riskTolerance}
@@ -149,7 +146,7 @@ const Profile = () => {
                       </SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
+                </div> */}
 
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <h4 className="font-medium text-blue-900 mb-2">🔒 Data Security</h4>

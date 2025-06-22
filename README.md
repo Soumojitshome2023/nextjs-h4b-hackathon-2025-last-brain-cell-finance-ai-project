@@ -1,14 +1,14 @@
 <p align="center">
-  <img src="./readmeAssets/Logo.png" alt="FinanceAI Home" width="600"/>
+  <img src="./readmeAssets/favicon-96x96.png" alt="FinanceAI Home" width="600"/>
 </p>
 
 
 
 # 💸 FinanceAI – AI-Powered Financial Intelligence Platform
 
-![FinanceAI Home](./readmeAssets/aibot.png)
+![FinanceAI Home](./readmeAssets/home.png)
 
-**FinanceAI** is your smart financial partner – combining intelligent expense tracking, personalized investment advice, and secure financial planning in one sleek platform. Built for young adults and modern investors, it brings **AI, Web3 security, and intuitive design** together to make finance easy and powerful.
+**FinanceAI** is your smart financial partner – combining intelligent expense tracking, personalized investment advice, and secure financial planning,view market trends in one sleek platform. Built for young adults and modern investors, it brings **AI, and intuitive design** together to make finance easy and powerful.
 
 ---
 
@@ -26,15 +26,21 @@
 
 ## 💡 What Makes FinanceAI Special?
 
-![Dashboard](./readmeAssets/dashboard2.png)
+![Dashboard](./readmeAssets/dashboard.png)
 
 ### 🤖 Smart Features You’ll Love:
 - 🎯 **AI-Based Financial Advisor**  
   Personalized advice based on your **income**, **risk**, and **goals**
+  
+![Dashboard](./readmeAssets/dashboard2.png)
+  
 - 🧠 **Intelligent Risk Profiling**  
   Analyzes **age, savings, income-to-expense ratio, and risk tolerance**
 - 📊 **Real-time Investment Suggestions**  
   Includes **SIPs**, **FDs**, and **market trades**
+
+![Dashboard](./readmeAssets/aibot.png)
+  
 - 💬 **Conversational AI Chatbot**  
   Ask complex financial questions using natural language
 
@@ -52,10 +58,11 @@
 - 📉 **Spending Pattern Predictions**
 - 💡 **Budgeting Tips & Goal Tracking**
 
-![Tax](./readmeAssets/Tax.png)
-
-### 📬 Extra Goodies:
+### 📬 More Features:
+![mail](./readmeAssets/mail.png)
 - ✉️ **Email Alerts** for budget breaches
+
+![Tax](./readmeAssets/Tax.png)
 - 🧮 **Tax Optimizer** powered by TaxVox  
   Calculates your tax & suggests **savings strategies**
 

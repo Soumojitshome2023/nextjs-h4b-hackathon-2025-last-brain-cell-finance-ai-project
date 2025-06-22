@@ -20,6 +20,7 @@ const Profile = () => {
     name: "",
     annualIncome: "",
     age: 22,
+    monthlyBudget: ""
   });
 
   useEffect(() => {
@@ -28,6 +29,7 @@ const Profile = () => {
         name: LoggedInUserData.name || "",
         age: LoggedInUserData.age || 22,
         annualIncome: LoggedInUserData.annualIncome || "",
+        monthlyBudget: LoggedInUserData.monthlyBudget || "",
       });
     }
   }, [LoggedInUserData]);
@@ -40,6 +42,7 @@ const Profile = () => {
         ...LoggedInUserData,
         annualIncome: formData.annualIncome,
         age: formData.age,
+        monthlyBudget: formData.monthlyBudget,
       };
 
       const result = await UpdateUserDataFunc(updatedData);
@@ -108,6 +111,18 @@ const Profile = () => {
                     placeholder="20000"
                     value={formData.annualIncome}
                     onChange={(e) => setFormData((prev) => ({ ...prev, annualIncome: e.target.value }))}
+                    required
+                    className="transition-all duration-200 focus:scale-105"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="annualIncome">Monthly Budget (₹)</Label>
+                  <Input
+                    id="monthlyBudget"
+                    type="number"
+                    placeholder="1000"
+                    value={formData.monthlyBudget}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, monthlyBudget: e.target.value }))}
                     required
                     className="transition-all duration-200 focus:scale-105"
                   />

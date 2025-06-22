@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import NotFound from "./NotFound"
 import { useAuth } from "@/helper/auth";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -8,18 +9,18 @@ import ExpenseSummary from "@/components/ExpenseSummary";
 import AIRecommendations from "@/components/AIRecommendations";
 import { TrendingUp, DollarSign, Target, Bot, AlertCircle, Plus } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import NotFound from "./NotFound"
 
 const Dashboard = () => {
   const { LoggedInUserData } = useAuth();
 
   if (!LoggedInUserData) return <NotFound />;
 
-  const monthlyAnnualIncome = LoggedInUserData?.annualIncome || 0;
+  const annualIncome = LoggedInUserData?.annualIncome || 0;
+  const monthlyBudget = LoggedInUserData?.monthlyBudget || 0;
   const expenses = LoggedInUserData?.expenses || [];
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
-  const budgetPercentage = monthlyAnnualIncome > 0 ? (totalExpenses / monthlyAnnualIncome) * 100 : 0;
-  const remainingBudget = monthlyAnnualIncome - totalExpenses;
+  const monthlyBudgetPercentage = monthlyBudget > 0 ? (totalExpenses / monthlyBudget) * 100 : 0;
+  const remainingBudget = monthlyBudget - totalExpenses;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -43,7 +44,7 @@ const Dashboard = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Annual Income</p>
-                  <p className="text-2xl font-bold text-gray-900">₹{monthlyAnnualIncome}</p>
+                  <p className="text-2xl font-bold text-gray-900">₹{annualIncome}</p>
                 </div>
                 <div className="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center">
                   <DollarSign className="w-6 h-6 text-white" />
@@ -70,6 +71,19 @@ const Dashboard = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
+                  <p className="text-sm font-medium text-gray-600">Monthly Budget</p>
+                  <p className="text-2xl font-bold text-green-600">₹{monthlyBudget}</p>
+                </div>
+                <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
+                  <Target className="w-6 h-6 text-white" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="glass-effect hover:shadow-lg transition-all duration-300 hover:scale-105">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
                   <p className="text-sm font-medium text-gray-600">Remaining Budget</p>
                   <p className="text-2xl font-bold text-green-600">₹{remainingBudget}</p>
                 </div>
@@ -85,7 +99,7 @@ const Dashboard = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Budget Usage</p>
-                  <p className="text-2xl font-bold text-purple-600">{budgetPercentage.toFixed(1)}%</p>
+                  <p className="text-2xl font-bold text-purple-600">{monthlyBudgetPercentage.toFixed(1)}%</p>
                 </div>
                 <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center">
                   <Bot className="w-6 h-6 text-white" />
@@ -107,17 +121,17 @@ const Dashboard = () => {
             <div className="space-y-4">
               <div className="flex justify-between text-sm text-gray-600">
                 <span>Budget Used: ₹{totalExpenses}</span>
-                <span>Total Budget: ₹{monthlyAnnualIncome}</span>
+                <span>Total Monthly Budget: ₹{monthlyBudget}</span>
               </div>
               <Progress
-                value={Math.min(budgetPercentage, 100)}
+                value={Math.min(monthlyBudgetPercentage, 100)}
                 className="w-full h-3"
               />
-              {budgetPercentage > 80 && (
+              {monthlyBudgetPercentage > 80 && (
                 <div className="flex items-center space-x-2 text-amber-600 bg-amber-50 p-3 rounded-lg">
                   <AlertCircle className="w-5 h-5" />
                   <span className="text-sm font-medium">
-                    You've used {budgetPercentage.toFixed(1)}% of your monthly budget. Consider reviewing your expenses.
+                    You've used {monthlyBudgetPercentage.toFixed(1)}% of your monthly budget. Consider reviewing your expenses.
                   </span>
                 </div>
               )}

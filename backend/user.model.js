@@ -37,6 +37,11 @@ const userSchema = new Schema(
       min: 0,
       default: 100000
     },
+    monthlyBudget: {
+      type: Number,
+      min: 0,
+      default: 1000
+    },
     monthlyExpense: {
       type: Number,
       min: 0,

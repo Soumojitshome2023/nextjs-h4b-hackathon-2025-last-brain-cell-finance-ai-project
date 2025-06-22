@@ -23,7 +23,7 @@ export async function updateUserDetails(email, updates) {
 
   const allowedFields = [
     'age', 'annualIncome', 'monthlyExpense', 'savings',
-    'investmentHorizon', 'riskTolerance', 'financialGoal', 'preferredAssets', 'expenses'
+    'investmentHorizon', 'riskTolerance', 'financialGoal', 'preferredAssets', 'expenses', 'monthlyBudget'
   ];
 
   const filteredUpdates = {};

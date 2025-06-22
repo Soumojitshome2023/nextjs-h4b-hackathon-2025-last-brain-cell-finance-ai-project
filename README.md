@@ -1,10 +1,6 @@
-<p align="center">
-  <img src="./readmeAssets/favicon-96x96.png" alt="FinanceAI Home" width="600"/>
-</p>
-
-
 
 # 💸 FinanceAI – AI-Powered Financial Intelligence Platform
+
 
 ![FinanceAI Home](./readmeAssets/home.png)
 

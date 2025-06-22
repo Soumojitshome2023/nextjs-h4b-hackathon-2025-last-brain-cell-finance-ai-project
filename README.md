@@ -158,13 +158,6 @@ cp .example.env .env    # Add API keys and configs
 npm run dev
 ```
 
-4. **AI Model Setup**
-
-```bash
-cd model
-pip install -r requirements.txt
-# Add Gemini API Key in .env
-```
 
 ---
 
@@ -173,16 +166,20 @@ pip install -r requirements.txt
 **Backend (`.env`)**
 
 ```
-MONGODB_URI=your_mongodb_connection
-PORT=3000
+PORT=4000
+MONGO_URI=your_mongodb_connection
+DBName=
+APIEMAILADDRESS=
+APIEMAILPASS=
 ```
 
 **Frontend (`.env`)**
 
 ```
-VITE_CivicClientID=your_civic_id
-VITE_GeminiAPI=your_gemini_key
-VITE_BACKEND_URL=http://localhost:3000
+VITE_BaseUrl=http://localhost:8080
+VITE_ServerUrl=http://localhost:4000
+VITE_GeminiAPI=
+VITE_CivicClientID=
 ```
 
 ---
@@ -200,9 +197,7 @@ VITE_BACKEND_URL=http://localhost:3000
 
 * 🚀 Lazy Loading & Code Splitting
 * 🗂️ Image & Asset Optimization
-* 🔁 Caching of API Responses
 * 📊 Indexed MongoDB Collections
-* 🌍 CDN-Powered Static Assets
 
 ---
 

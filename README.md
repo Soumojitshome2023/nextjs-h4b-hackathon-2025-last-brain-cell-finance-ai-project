@@ -76,6 +76,7 @@
 ### 🌐 Backend
 - Node.js 🚀  
 - MongoDB 🍃  
+- Nodemailer  
 - JWT Authentication 🔐  
 - CORS + .env configuration  
 

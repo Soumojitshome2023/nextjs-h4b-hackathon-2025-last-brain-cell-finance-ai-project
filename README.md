@@ -232,11 +232,10 @@ VITE_CivicClientID=
 
 ## 👥 Team Last Brain Cell
 
-* 🧠 [Soumojit](https://github.com/Soumojitshome2023)
-* ⚙️ [Satwik](https://github.com/Rick-03)
-* 🎨 [Atrayee](https://github.com/vamus092)
 * 📊 [Madhumanti](https://github.com/MadhumantiSaha)
+* 🎨 [Atrayee](https://github.com/AtrayeeM)
+* ⚙️ [Satwik](https://github.com/Rick-03)
+* 🧠 [Soumojit](https://github.com/Soumojitshome2023)
 
 ---
 
-> Made with 💚 for smarter finance!
